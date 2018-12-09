@@ -327,6 +327,13 @@ public class Game{
     return num;
   }
 
+  public boolean isHexxed(){
+    if(this.getNextValidMoves().size() == 0){
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @Override
   public String toString(){
