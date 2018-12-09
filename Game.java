@@ -38,14 +38,15 @@ public class Game{
 
     @Override
     public String toString(){
-      return "Column : " + this.col + " Row : " + this.row;
+      return "Column : " + this.col + " Row : " + this.row +
+        " Player : " + (player == Game.GREEN ? "GREEN" : "RED");
 
     }
 
   }
 
   private int[][] board = new int[7][9];
-  private int currentMove = Game.GREEN;
+  private int currentPlayer = Game.GREEN;
 
   public static final int BLANKTILE = 0;
   public static final int GREEN = 1;
@@ -62,7 +63,7 @@ public class Game{
 
   public Game(int col, int row, int color, int firstMove){
 
-    this.currentMove = firstMove;
+    this.currentPlayer = firstMove;
 
     //init the board
     for(int i = 0; i < board.length; i++){
@@ -100,8 +101,8 @@ public class Game{
     LinkedList<Move> moves = new LinkedList<>();
     for(int i = 0; i < board.length; i++){
       for(int j = 0; j < board[i].length; j++){
-        if(isMoveValid(i,j)){
-          moves.add(new Move(i,j,currentMove));
+        if(isMoveValid(i,j,false)){
+          moves.add(new Move(i,j,currentPlayer));
         }
       }
     }
@@ -109,7 +110,23 @@ public class Game{
     return moves;
   }
 
-  private boolean isSandwiched(int row,int col, int direction, int opponent){
+  public void move(Move m) throws Exception{
+
+    int row = m.getRow();
+    int col = m.getCol();
+    int player = m.getPlayer();
+    if(player != currentPlayer){
+      throw new Exception("Wrong Player");
+    }
+    if(isMoveValid(row,col,true)){
+      return;
+    }else{
+      throw new Exception("Invalid Move");
+    }
+
+  }
+
+  private boolean isSandwiched(int row,int col, int direction, int opponent, boolean capture){
 
     int nextRow = row;
     int nextCol = col;
@@ -175,21 +192,31 @@ public class Game{
 
 
     int nextTile = board[nextRow][nextCol];
-    if(nextTile == currentMove){
+    if(nextTile == currentPlayer){
       return true;
-    } else if(nextTile == opponent){
-      return isSandwiched(nextRow, nextCol, direction, opponent);
-    } else if(nextTile == Game.BLANKTILE){
-      return false;
-    } else {
-      return false;
     }
 
+    if(nextTile == opponent){
+
+      if(capture){
+        if(isSandwiched(nextRow, nextCol, direction, opponent,capture)){
+          board[row][col] = currentPlayer;
+          return true;
+        }else{
+          return false;
+        }
+      }else{
+        return isSandwiched(nextRow, nextCol, direction, opponent,capture);
+      }
+
+    }
+
+    return false;
   }
 
-  public boolean isMoveValid(int row, int col){
+  public boolean isMoveValid(int row, int col, boolean capture){
     if(board[row][col] == Game.BLANKTILE){
-      int opponent = currentMove == Game.GREEN ? Game.RED : Game.GREEN;
+      int opponent = currentPlayer == Game.GREEN ? Game.RED : Game.GREEN;
 
       //array of ints for the coords of the neighbors of the move
       //6 moves, each has 3 attrs (row, col) and direction
@@ -253,7 +280,7 @@ public class Game{
           int currentNeighbor = board[ neighbors[i][0] ][ neighbors[i][1] ];
 
           if(currentNeighbor == opponent){
-            if(isSandwiched(neighbors[i][0], neighbors[i][1], neighbors[i][2], opponent)){
+            if(isSandwiched(neighbors[i][0], neighbors[i][1], neighbors[i][2], opponent, capture)){
               return true;
             }
           }
@@ -280,7 +307,7 @@ public class Game{
   }
 
   public static void main(String[] args) {
-    Game g = new Game(5,5,Game.GREEN,Game.RED);
+    Game g = new Game(1,4,Game.RED,Game.RED);
     System.out.println(g);
     LinkedList<Move> moves = g.getNextValidMoves();
 
