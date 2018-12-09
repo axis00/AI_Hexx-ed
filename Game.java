@@ -119,6 +119,8 @@ public class Game{
       throw new Exception("Wrong Player");
     }
     if(isMoveValid(row,col,true)){
+      board[row][col] = currentPlayer;
+      currentPlayer = currentPlayer == Game.GREEN ? Game.RED : Game.GREEN;
       return;
     }else{
       throw new Exception("Invalid Move");
@@ -193,13 +195,16 @@ public class Game{
 
     int nextTile = board[nextRow][nextCol];
     if(nextTile == currentPlayer){
+      if(capture){
+        board[row][col] = currentPlayer;
+      }
       return true;
     }
 
     if(nextTile == opponent){
-
       if(capture){
         if(isSandwiched(nextRow, nextCol, direction, opponent,capture)){
+
           board[row][col] = currentPlayer;
           return true;
         }else{
@@ -309,10 +314,20 @@ public class Game{
   public static void main(String[] args) {
     Game g = new Game(1,4,Game.RED,Game.RED);
     System.out.println(g);
-    LinkedList<Move> moves = g.getNextValidMoves();
 
-    for(Move m : moves){
-      System.out.println(m);
+    for(int i = 0 ; i < 3; i++){
+      LinkedList<Move> moves = g.getNextValidMoves();
+
+      for(Move m : moves){
+        System.out.println(m);
+      }
+
+      try{
+        g.move(moves.get(0));
+        System.out.println(g);
+      }catch(Exception e){
+        e.printStackTrace();
+      }
     }
 
   }
