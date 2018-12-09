@@ -293,6 +293,36 @@ public class Game{
     return false;
   }
 
+  public Game clone(){
+    Game copy = new Game(2,2,Game.GREEN,Game.RED);
+    copy.board = this.board;
+    copy.currentPlayer = this.currentPlayer;
+    return copy;
+  }
+
+  public int countRedTiles(){
+    int num = 0;
+    for(int i = 0; i < this.board.length; i++){
+      for(int j = 0; j < this.board[i].length; j++){
+        if(this.board[i][j] == Game.RED)
+          num++;
+      }
+    }
+    return num;
+  }
+
+  public int countGreenTiles(){
+    int num = 0;
+    for(int i = 0; i < this.board.length; i++){
+      for(int j = 0; j < this.board[i].length; j++){
+        if(this.board[i][j] == Game.GREEN)
+          num++;
+      }
+    }
+    return num;
+  }
+
+
   @Override
   public String toString(){
     String res = "";
@@ -314,7 +344,6 @@ public class Game{
     for(Move m : moves){
       System.out.println(m);
     }
-
   }
 
 }
