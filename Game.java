@@ -2,49 +2,6 @@ import java.util.LinkedList;
 
 public class Game{
 
-  class Move{
-
-    private int col, row, player;
-
-    public Move(int row, int col, int player){
-      this.col = col;
-      this.row = row;
-      this.player = player;
-    }
-
-    public void setCol(int col){
-      this.col = col;
-    }
-
-    public void setRow(int row){
-      this.row = row;
-    }
-
-    public void setPlayer(int player){
-      this.player = player;
-    }
-
-    public int getCol(){
-      return col;
-    }
-
-    public int getRow(){
-      return row;
-    }
-
-    public int getPlayer(){
-      return player;
-    }
-
-    @Override
-    public String toString(){
-      return "Column : " + this.col + " Row : " + this.row +
-        " Player : " + (player == Game.GREEN ? "GREEN" : "RED");
-
-    }
-
-  }
-
   private int[][] board = new int[7][9];
   private int currentPlayer = Game.GREEN;
   private boolean wasHexxed, isHexxed, isGameOver;
@@ -119,11 +76,11 @@ public class Game{
   }
 
   public boolean isGameOver(){
-    isGameOver = isHexxed && wasHexxed;
     return isGameOver;
   }
 
   public void move(Move m) throws Exception{
+    isGameOver = wasHexxed && isHexxed;
     wasHexxed = isHexxed;
     //pass
     if(m == null){
@@ -298,6 +255,8 @@ public class Game{
 
       }
 
+      boolean res = false;
+
       //for all neighbors
       for(int i = 0; i < neighbors.length; i++){
         try{
@@ -305,15 +264,16 @@ public class Game{
 
           if(currentNeighbor == opponent){
             if(isSandwiched(neighbors[i][0], neighbors[i][1], neighbors[i][2], opponent, capture)){
-              return true;
+              res = true;
             }
           }
         } catch (ArrayIndexOutOfBoundsException e){
           continue;
         }
       }
-      return false;
+      return res;
     }
+
     return false;
   }
 
@@ -347,11 +307,6 @@ public class Game{
   }
 
   public boolean isHexxed(){
-    // if(this.getNextValidMoves().size() == 0){
-    //   return true;
-    // } else {
-    //   return false;
-    // }
     return this.isHexxed;
   }
 
@@ -366,31 +321,6 @@ public class Game{
     }
 
     return res;
-  }
-
-  public static void main(String[] args) {
-    Game g = new Game(4,4,Game.GREEN,Game.GREEN);
-    System.out.println(g);
-
-    while(!g.isGameOver()){
-      LinkedList<Move> moves = g.getNextValidMoves();
-
-      for(Move m : moves){
-        System.out.println(m);
-      }
-
-      try{
-        if(g.isHexxed){
-          //pass
-          g.move(null);
-          continue;
-        }
-        g.move(moves.get(0));
-        System.out.println(g);
-      }catch(Exception e){
-        e.printStackTrace();
-      }
-    }
   }
 
 }
