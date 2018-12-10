@@ -47,6 +47,7 @@ public class Game{
 
   private int[][] board = new int[7][9];
   private int currentPlayer = Game.GREEN;
+  private boolean wasHexxed, isHexxed, isGameOver;
 
   public static final int BLANKTILE = 0;
   public static final int GREEN = 1;
@@ -64,6 +65,7 @@ public class Game{
   public Game(int col, int row, int color, int firstMove){
 
     this.currentPlayer = firstMove;
+    this.isHexxed = this.wasHexxed = this.isGameOver = false;
 
     //init the board
     for(int i = 0; i < board.length; i++){
@@ -107,10 +109,27 @@ public class Game{
       }
     }
 
+    if(moves.size() == 0){
+      isHexxed = true;
+    }else{
+      isHexxed = false;
+    }
+
     return moves;
   }
 
+  public boolean isGameOver(){
+    isGameOver = isHexxed && wasHexxed;
+    return isGameOver;
+  }
+
   public void move(Move m) throws Exception{
+    wasHexxed = isHexxed;
+    //pass
+    if(m == null){
+      currentPlayer = currentPlayer == Game.GREEN ? Game.RED : Game.GREEN;
+      return;
+    }
 
     int row = m.getRow();
     int col = m.getCol();
@@ -118,6 +137,7 @@ public class Game{
     if(player != currentPlayer){
       throw new Exception("Wrong Player");
     }
+
     if(isMoveValid(row,col,true)){
       board[row][col] = currentPlayer;
       currentPlayer = currentPlayer == Game.GREEN ? Game.RED : Game.GREEN;
@@ -204,7 +224,6 @@ public class Game{
     if(nextTile == opponent){
       if(capture){
         if(isSandwiched(nextRow, nextCol, direction, opponent,capture)){
-
           board[row][col] = currentPlayer;
           return true;
         }else{
@@ -328,11 +347,12 @@ public class Game{
   }
 
   public boolean isHexxed(){
-    if(this.getNextValidMoves().size() == 0){
-      return true;
-    } else {
-      return false;
-    }
+    // if(this.getNextValidMoves().size() == 0){
+    //   return true;
+    // } else {
+    //   return false;
+    // }
+    return this.isHexxed;
   }
 
   @Override
@@ -349,10 +369,10 @@ public class Game{
   }
 
   public static void main(String[] args) {
-    Game g = new Game(1,4,Game.RED,Game.RED);
+    Game g = new Game(4,4,Game.GREEN,Game.GREEN);
     System.out.println(g);
 
-    for(int i = 0 ; i < 3; i++){
+    while(!g.isGameOver()){
       LinkedList<Move> moves = g.getNextValidMoves();
 
       for(Move m : moves){
@@ -360,6 +380,11 @@ public class Game{
       }
 
       try{
+        if(g.isHexxed){
+          //pass
+          g.move(null);
+          continue;
+        }
         g.move(moves.get(0));
         System.out.println(g);
       }catch(Exception e){
