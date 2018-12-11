@@ -26,10 +26,10 @@ public class HexxedAI{
           System.out.println("passed");
           System.out.println(g);
           continue;
+
         }
-        State initState = new State(g,Game.GREEN,Game.GREEN,4);
-        initState.expand();
-        System.out.println(g);
+        State initState = new State(g,State.MAXIMIZING_PLAYER,Game.GREEN,0);
+        int n = initState.getMinimaxVal();
       }catch(Exception e){
         e.printStackTrace();
       }
