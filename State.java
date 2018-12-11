@@ -52,9 +52,48 @@ public class State{
     // if green max RED
     // if red max GREEN
 
+    LinkedList<Move> moves = g.getNextValidMoves();
+
+    if(g.isGameOver || this.depth >= State.MAX_DEPTH){
+      if(this.color == Game.GREEN){
+        return g.countRedTiles();
+      }else{
+        return g.countGreenTiles();
+      }
+    }
+
+    if(this.currentPlayer == State.MAXIMIZING_PLAYER){
+      // TODO
+    }
+
+    if(this.currentPlayer == State.MINIMIZING_PLAYER){
+      // TODO
+    }
+
   }
 
-  public Move getBestMove(){
+  public Move getBestMove() throws Exception{
+
+    LinkedList<Move> moves = this.g.getNextValidMoves();
+
+    if(this.g.isGameOver()){
+      throw new Exception("Game Over");
+    }
+
+    int maxVal = 0;
+    Move bestMove = null;
+
+    for(Move m : moves){
+      Game newGame  = this.g.clone();
+      newGame.move(m);
+      State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
+      int currVal = newState.getMinimaxVal();
+      if(currVal > maxVal){
+        bestMove = m;
+      }
+    }
+
+    return bestMove;
 
   }
 
