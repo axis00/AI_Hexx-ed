@@ -4,7 +4,7 @@ public class Game{
 
   private int[][] board = new int[7][9];
   private int currentPlayer = Game.GREEN;
-  private boolean wasHexxed, isHexxed, isGameOver;
+  public boolean wasHexxed, isHexxed, isGameOver;
 
   public static final int BLANKTILE = 0;
   public static final int GREEN = 1;

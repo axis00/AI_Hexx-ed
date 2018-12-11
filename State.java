@@ -1,11 +1,15 @@
+import java.util.LinkedList;
+
 public class State{
 
-  public static final MAXIMIZING_PLAYER = 1;
-  public static final MINIMIZING_PLAYER = -MAXIMIZING_PLAYER;
-  public static final MAX_DEPTH = 4;
+  public static final int MAXIMIZING_PLAYER = 1;
+  public static final int MINIMIZING_PLAYER = -MAXIMIZING_PLAYER;
+  public static final int MAX_DEPTH = 4;
   private Game g;
   private int currentPlayer;
   private int minimaxVal;
+  private int maxVal;
+  private int color;
   private int depth;
   private LinkedList<State> children;
 
@@ -16,7 +20,7 @@ public class State{
     this.depth = depth;
   }
 
-  public void expand(){
+  public void expand() throws Exception{
     if(g.isGameOver()){
       return ;
     }
@@ -31,7 +35,7 @@ public class State{
       //pass
       Game newGame = this.g.clone();
       newGame.move(null);
-      State newState = new State(newGame,-this.currentPlayer,this.depth++);
+      State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
       newState.expand();
       this.children.add(newState);
     }
@@ -40,13 +44,13 @@ public class State{
       Game newGame = this.g.clone();
       newGame.move(m);
 
-      State newState = new State(newGame,-this.currentPlayer,this.depth++);
+      State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
       newState.expand();
       this.children.add(newState);
     }
   }
 
-  public int getMinimaxVal(){
+  public int getMinimaxVal() throws Exception{
     // if(min) get min( minimax of next states )
     // if(max) get max( minimax of next states )
     // if green max RED
@@ -99,7 +103,7 @@ public class State{
 
       return minVal;
     }
-
+    return 0;
   }
 
   public Move getBestMove() throws Exception{

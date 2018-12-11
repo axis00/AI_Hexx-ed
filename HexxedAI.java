@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class HexxedAI{
 
   public static void main(String[] args) {
-    Game g = new Game(7,5,Game.GREEN,Game.GREEN);
+    Game g = new Game(4,4,Game.GREEN,Game.GREEN);
     System.out.println(g);
 
     Scanner sc = new Scanner(System.in);
@@ -27,7 +27,8 @@ public class HexxedAI{
           System.out.println(g);
           continue;
         }
-        g.move(moves.get(0));
+        State initState = new State(g,Game.GREEN,Game.GREEN,4);
+        initState.expand();
         System.out.println(g);
       }catch(Exception e){
         e.printStackTrace();
