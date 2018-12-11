@@ -64,10 +64,40 @@ public class State{
 
     if(this.currentPlayer == State.MAXIMIZING_PLAYER){
       // TODO
+      // do all the moves then get max
+      // don't forget to alternate
+      int maxVal = 0;
+
+      for(Move m : moves){
+        Game newGame  = this.g.clone();
+        newGame.move(m);
+        State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
+        int currVal = newState.getMinimaxVal();
+        if(currVal > maxVal){
+          maxVal = currVal;
+        }
+      }
+
+      return maxVal;
     }
 
     if(this.currentPlayer == State.MINIMIZING_PLAYER){
       // TODO
+      // do all the moves then get min
+      // don't forget to alternate
+      int minVal = 0;
+
+      for(Move m : moves){
+        Game newGame  = this.g.clone();
+        newGame.move(m);
+        State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
+        int currVal = newState.getMinimaxVal();
+        if(currVal < maxVal){
+          minVal = currVal;
+        }
+      }
+
+      return minVal;
     }
 
   }
@@ -90,6 +120,7 @@ public class State{
       int currVal = newState.getMinimaxVal();
       if(currVal > maxVal){
         bestMove = m;
+        maxVal = currVal;
       }
     }
 
