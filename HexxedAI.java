@@ -3,37 +3,45 @@ import java.util.Scanner;
 
 public class HexxedAI{
 
-  public static void main(String[] args) {
-    Game g = new Game(4,4,Game.GREEN,Game.GREEN);
-    System.out.println(g);
+  public static void main(String[] args) throws Exception{
 
     Scanner sc = new Scanner(System.in);
+    System.out.print("What is my color? [g/r] : ");
+    int color = sc.next().charAt(0) == 'g' ? Game.GREEN : Game.RED;
+    System.out.print("Enter the starting config (col row color[g/r] first[g/r]) : ");
+    int g_col = sc.nextInt();
+    int g_row = sc.nextInt();
+    int g_color = sc.next().charAt(0) == 'g' ? Game.GREEN : Game.RED;
+    int g_first = sc.next().charAt(0) == 'g' ? Game.GREEN : Game.RED;
+
+    Game g = new Game(g_col,g_row,g_color,g_first);
+    System.out.println(g);
+
+
+    State currState = new State(g.clone(),State.MAXIMIZING_PLAYER,color,0);
 
     while(!g.isGameOver()){
 
-      sc.nextLine();
+      if(g.getCurrentPlayer() == color){
+        Move aiMove = currState.getBestMove();
+        System.out.println(aiMove);
+        g.move(aiMove);
+      }else{
 
-      LinkedList<Move> moves = g.getNextValidMoves();
+        System.out.print("Enter opponent's move (col row) : ");
+        int o_col = sc.nextInt();
+        int o_row = sc.nextInt();
 
-      for(Move m : moves){
-        System.out.println(m);
+        Move o_move = new Move(o_row,o_col,g.getCurrentPlayer());
+        g.move(o_move);
+
       }
 
-      try{
-        if(g.isHexxed()){
-          //pass
-          g.move(null);
-          System.out.println("passed");
-          System.out.println(g);
-          continue;
+      currState = new State(g.clone(),State.MAXIMIZING_PLAYER,color,0);
 
-        }
-        State initState = new State(g,State.MAXIMIZING_PLAYER,Game.GREEN,0);
-        int n = initState.getMinimaxVal();
-      }catch(Exception e){
-        e.printStackTrace();
-      }
     }
+
+    System.out.println("Game Over");
   }
 
 }

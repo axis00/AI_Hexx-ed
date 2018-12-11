@@ -4,7 +4,7 @@ public class State{
 
   public static final int MAXIMIZING_PLAYER = 1;
   public static final int MINIMIZING_PLAYER = -MAXIMIZING_PLAYER;
-  public static final int MAX_DEPTH = 2;
+  public static final int MAX_DEPTH = 1;
   private Game g;
   private int currentPlayer;
   private int minimaxVal;
@@ -28,8 +28,12 @@ public class State{
 
     LinkedList<Move> moves = g.getNextValidMoves();
 
+    for(Move m : moves){
+      System.out.println(m);
+    }
+
     // utility function ; this should be right
-    if(g.isGameOver || this.depth >= State.MAX_DEPTH){
+    if(g.isGameOver() || this.depth >= State.MAX_DEPTH){
       if(this.color == Game.GREEN){
         return g.countRedTiles();
       }else{
@@ -42,15 +46,16 @@ public class State{
       // TODO
       // do all the moves then get max
       // don't forget to alternate
+
       int maxVal = 0;
 
       for(Move m : moves){
-        System.out.println("Maximize---- "+m);
+        System.out.println("Maximize---- " + depth + m);
         Game newGame  = this.g.clone();
         newGame.move(m);
         State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
         int currVal = newState.getMinimaxVal();
-        System.out.println("can you go here");
+        System.out.println("can you go here max");
         if(currVal > maxVal){
           maxVal = currVal;
         }
@@ -64,14 +69,15 @@ public class State{
       // TODO
       // do all the moves then get min
       // don't forget to alternate
-      int minVal = 0;
+      int minVal = 99999999;
 
       for(Move m : moves){
-        System.out.println("Minimize---- "+m);
+        System.out.println("Minimize---- " + depth + m);
         Game newGame  = this.g.clone();
         newGame.move(m);
         State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
         int currVal = newState.getMinimaxVal();
+        System.out.println("can you go here min");
         if(currVal < maxVal){
           minVal = currVal;
         }
@@ -88,6 +94,10 @@ public class State{
 
     if(this.g.isGameOver()){
       throw new Exception("Game Over");
+    }
+
+    for(Move m : moves){
+      System.out.println(m);
     }
 
     int maxVal = 0;

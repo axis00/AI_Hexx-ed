@@ -313,6 +313,10 @@ public class Game{
     return this.isHexxed;
   }
 
+  public int getCurrentPlayer(){
+    return currentPlayer;
+  }
+
   @Override
   public String toString(){
     String res = "";
