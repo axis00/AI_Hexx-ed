@@ -279,8 +279,11 @@ public class Game{
 
   public Game clone(){
     Game copy = new Game(2,2,Game.GREEN,Game.RED);
-    copy.board = this.board;
+    copy.board = this.board.clone();
     copy.currentPlayer = this.currentPlayer;
+    copy.isHexxed = this.isHexxed;
+    copy.wasHexxed = this.wasHexxed;
+    copy.isGameOver = this.isGameOver;
     return copy;
   }
 
