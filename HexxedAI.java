@@ -3,6 +3,10 @@ import java.util.Scanner;
 
 public class HexxedAI{
 
+  /**
+    @author Jhaylord Viray, Neil Bucsit, David Brackin (in order of contribution)
+  */
+
   public static void main(String[] args) throws Exception{
 
     Scanner sc = new Scanner(System.in);
@@ -27,14 +31,14 @@ public class HexxedAI{
       if(g.getCurrentPlayer() == color){
         System.out.println("\nAI is thinking...hmmm...");
         Move aiMove = currState.getBestMove();
-        System.out.println("AI's move : " + aiMove != null ? aiMove : "Pass" );
+        System.out.println("AI's move : " + (aiMove != null ? aiMove : "Pass") );
         g.move(aiMove);
       }else{
 
         if(g.isHexxed()){
           g.move(null);
           System.out.println("Enter opponent's move (col row) : Hexxed! I moved it for you. (Press Enter to Continue ...)");
-          sc.nextLine();
+          String nothing = sc.nextLine();
           currState = new State(g.clone(),State.MAXIMIZING_PLAYER,color,0);
           continue;
         }

@@ -19,6 +19,9 @@ public class Game{
   public static final int DIRECTION_DOWNLEFT = 4;
   public static final int DIRECTION_DOWNRIGHT = 5;
 
+  /**
+    @author Neil Bucsit
+  */
   public Game(int col, int row, int color, int firstMove){
 
     this.currentPlayer = firstMove;
@@ -53,7 +56,8 @@ public class Game{
   }
 
   /**
-  * returns a list of valid moves
+    @author David Brackin
+    This method returns a list of valid moves.
   */
   public LinkedList<Move> getNextValidMoves(){
 
@@ -79,6 +83,9 @@ public class Game{
     return isGameOver;
   }
 
+  /**
+    @author David Brackin
+  */
   public void move(Move m) throws Exception{
     isGameOver = wasHexxed && isHexxed;
     wasHexxed = isHexxed;
@@ -102,6 +109,10 @@ public class Game{
 
   }
 
+
+  /**
+    @author David Brackin
+  */
   private boolean isSandwiched(int row,int col, int direction, int opponent, boolean capture){
 
     int nextRow = row;
@@ -192,6 +203,9 @@ public class Game{
     return false;
   }
 
+  /**
+    @author David Brackin
+  */
   public boolean isMoveValid(int row, int col, boolean capture){
     if(board[row][col] == Game.BLANKTILE){
       int opponent = currentPlayer == Game.GREEN ? Game.RED : Game.GREEN;
@@ -274,6 +288,10 @@ public class Game{
     return false;
   }
 
+  /**
+    @author Neil Bucsit
+    This method clones a game configuration.
+  */
   public Game clone(){
     int[][] boardCopy = new int[7][9];
     Game copy = new Game(2,2,Game.GREEN,Game.RED);
@@ -290,6 +308,10 @@ public class Game{
     return copy;
   }
 
+  /**
+    @author Neil Bucsit
+    This method counts all the red tiles in the board.
+  */
   public int countRedTiles(){
     int num = 0;
     for(int i = 0; i < this.board.length; i++){
@@ -301,6 +323,10 @@ public class Game{
     return num;
   }
 
+  /**
+    @author Neil Bucsit
+    This method counts all the green tiles in the board.
+  */
   public int countGreenTiles(){
     int num = 0;
     for(int i = 0; i < this.board.length; i++){
@@ -320,6 +346,9 @@ public class Game{
     return currentPlayer;
   }
 
+  /**
+    @author David Brackin
+  */
   @Override
   public String toString(){
     String res = "";

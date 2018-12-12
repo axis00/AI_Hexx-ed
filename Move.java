@@ -1,3 +1,8 @@
+/**
+@author Jhaylord Viray
+This is a class for encapsulating the moves.
+*/
+
 public class Move{
 
   private int col, row, player;

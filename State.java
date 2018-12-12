@@ -1,5 +1,7 @@
 import java.util.LinkedList;
 
+//A class to represent each state in the game space
+
 public class State{
 
   public static final int MAXIMIZING_PLAYER = 1;
@@ -8,10 +10,8 @@ public class State{
   private Game g;
   private int currentPlayer;
   private int minimaxVal;
-  private int maxVal;
   private int color;
   private int depth;
-  private LinkedList<State> children;
 
   public State(Game g, int currentPlayer, int color, int depth){
     this.g = g;
@@ -20,7 +20,10 @@ public class State{
     this.depth = depth;
   }
 
-
+  /**
+    @author David Brackin
+    Recursively calculate the minimax value of this state until MAX_DEPTH.
+  */
   public int getMinimaxVal() throws Exception{
     // if(min) get min( minimax of next states )
     // if(max) get max( minimax of next states )
@@ -29,7 +32,7 @@ public class State{
 
     LinkedList<Move> moves = g.getNextValidMoves();
 
-    // utility function ; this should be right
+    // utility function
     if(g.isGameOver() || this.depth >= State.MAX_DEPTH){
       if(this.color == Game.GREEN){
         return g.countRedTiles();
@@ -93,7 +96,7 @@ public class State{
         newGame.move(m);
         State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
         int currVal = newState.getMinimaxVal();
-        if(currVal < maxVal){
+        if(currVal < minVal){
           minVal = currVal;
         }
       }
@@ -103,6 +106,11 @@ public class State{
     return 0;
   }
 
+  /**
+    @author Neil Bucsit
+    This is a method for getting the best move for this state.
+    It works by getting the maximum of all the minimax values of this state.
+  */
   public Move getBestMove() throws Exception{
 
     LinkedList<Move> moves = this.g.getNextValidMoves();
