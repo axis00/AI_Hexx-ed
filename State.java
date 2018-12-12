@@ -4,7 +4,7 @@ public class State{
 
   public static final int MAXIMIZING_PLAYER = 1;
   public static final int MINIMIZING_PLAYER = -MAXIMIZING_PLAYER;
-  public static final int MAX_DEPTH = 1;
+  public static final int MAX_DEPTH = 5;
   private Game g;
   private int currentPlayer;
   private int minimaxVal;
@@ -20,6 +20,7 @@ public class State{
     this.depth = depth;
   }
 
+
   public int getMinimaxVal() throws Exception{
     // if(min) get min( minimax of next states )
     // if(max) get max( minimax of next states )
@@ -27,10 +28,6 @@ public class State{
     // if red max GREEN
 
     LinkedList<Move> moves = g.getNextValidMoves();
-
-    for(Move m : moves){
-      System.out.println(m);
-    }
 
     // utility function ; this should be right
     if(g.isGameOver() || this.depth >= State.MAX_DEPTH){
@@ -41,7 +38,7 @@ public class State{
       }
     }
 
-    // return highest value of MAXIMIZING_PLAYER
+      // return highest value of MAXIMIZING_PLAYER
     if(this.currentPlayer == State.MAXIMIZING_PLAYER){
       // TODO
       // do all the moves then get max
@@ -49,13 +46,22 @@ public class State{
 
       int maxVal = 0;
 
+      if(g.isHexxed()){
+        Game newGame  = this.g.clone();
+        newGame.move(null);
+        State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
+        int currVal = newState.getMinimaxVal();
+        if(currVal > maxVal){
+          maxVal = currVal;
+        }
+      }
+
       for(Move m : moves){
-        System.out.println("Maximize---- " + depth + m);
+
         Game newGame  = this.g.clone();
         newGame.move(m);
         State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
         int currVal = newState.getMinimaxVal();
-        System.out.println("can you go here max");
         if(currVal > maxVal){
           maxVal = currVal;
         }
@@ -71,13 +77,22 @@ public class State{
       // don't forget to alternate
       int minVal = 99999999;
 
+      if(g.isHexxed()){
+        Game newGame  = this.g.clone();
+        newGame.move(null);
+        State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
+        int currVal = newState.getMinimaxVal();
+        if(currVal < minVal){
+          minVal = currVal;
+        }
+      }
+
       for(Move m : moves){
-        System.out.println("Minimize---- " + depth + m);
+
         Game newGame  = this.g.clone();
         newGame.move(m);
         State newState = new State(newGame,-this.currentPlayer,this.color,this.depth++);
         int currVal = newState.getMinimaxVal();
-        System.out.println("can you go here min");
         if(currVal < maxVal){
           minVal = currVal;
         }
@@ -94,10 +109,6 @@ public class State{
 
     if(this.g.isGameOver()){
       throw new Exception("Game Over");
-    }
-
-    for(Move m : moves){
-      System.out.println(m);
     }
 
     int maxVal = 0;

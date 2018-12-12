@@ -22,19 +22,34 @@ public class HexxedAI{
 
     while(!g.isGameOver()){
 
+      LinkedList<Move> moves = g.getNextValidMoves();
+
       if(g.getCurrentPlayer() == color){
+        System.out.println("\nAI is thinking...hmmm...");
         Move aiMove = currState.getBestMove();
-        System.out.println(aiMove);
+        System.out.println("AI's move : " + aiMove != null ? aiMove : "Pass" );
         g.move(aiMove);
       }else{
 
-        System.out.print("Enter opponent's move (col row) : ");
-        int o_col = sc.nextInt();
-        int o_row = sc.nextInt();
+        if(g.isHexxed()){
+          g.move(null);
+          System.out.println("Enter opponent's move (col row) : Hexxed! I moved it for you. (Press Enter to Continue ...)");
+          sc.nextLine();
+          currState = new State(g.clone(),State.MAXIMIZING_PLAYER,color,0);
+          continue;
+        }
 
-        Move o_move = new Move(o_row,o_col,g.getCurrentPlayer());
-        g.move(o_move);
+        try {
+          System.out.print("Enter opponent's move (col row) : ");
 
+          int o_col = sc.nextInt();
+          int o_row = sc.nextInt();
+          Move o_move = new Move(o_row,o_col,g.getCurrentPlayer());
+          g.move(o_move);
+        }catch(Exception e){
+          System.out.println("Invalid Move! Nice try guy.");
+          continue;
+        }
       }
 
       currState = new State(g.clone(),State.MAXIMIZING_PLAYER,color,0);

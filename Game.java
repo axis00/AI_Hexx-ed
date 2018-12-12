@@ -91,9 +91,6 @@ public class Game{
     int row = m.getRow();
     int col = m.getCol();
     int player = m.getPlayer();
-    if(player != currentPlayer){
-      throw new Exception("Wrong Player");
-    }
 
     if(isMoveValid(row,col,true)){
       board[row][col] = currentPlayer;
@@ -278,8 +275,14 @@ public class Game{
   }
 
   public Game clone(){
+    int[][] boardCopy = new int[7][9];
     Game copy = new Game(2,2,Game.GREEN,Game.RED);
-    copy.board = this.board.clone();
+    for(int i = 0; i < boardCopy.length; i++) {
+      for(int j = 0; j < boardCopy[i].length; j++){
+        boardCopy[i][j] = this.board[i][j];
+      }
+    }
+    copy.board = boardCopy;
     copy.currentPlayer = this.currentPlayer;
     copy.isHexxed = this.isHexxed;
     copy.wasHexxed = this.wasHexxed;

@@ -34,8 +34,7 @@ public class Move{
 
   @Override
   public String toString(){
-    return "Column : " + this.col + " Row : " + this.row +
-      " Player : " + (player == Game.GREEN ? "GREEN" : "RED");
+    return "Column : " + this.col + " Row : " + this.row;
   }
 
 }
