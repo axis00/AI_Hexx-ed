@@ -6,7 +6,7 @@ This is a class for encapsulating the moves.
 public class Move{
 
   private int col, row, player;
-
+ 
   public Move(int row, int col, int player){
     this.col = col;
     this.row = row;
